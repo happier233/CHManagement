@@ -25,12 +25,13 @@ class User extends Validate
      * @var array
      */
     protected $message = [
-        'permission.in' => '没有该权限'
+        'permission.in' => '没有该权限',
+        'password.require' => '请输入密码',
     ];
 
-    public function sceneCreate()
-    {
+    public function sceneCreate() {
         $this->append('nick', 'require')
+            ->append('password', 'require')
             ->append('email', 'require')
             ->append('permission', 'require');
     }

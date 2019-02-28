@@ -8,20 +8,30 @@ class Work extends Validate
 {
     /**
      * 定义验证规则
-     * 格式：'字段名'	=>	['规则1','规则2'...]
+     * 格式：'字段名'    =>    ['规则1','规则2'...]
      *
      * @var array
-     */	
-	protected $rule = [
-	    'doctor'=>['require', 'integer'],
-        'start_time'=>['require', 'date']
+     */
+    protected $rule = [
+        'doctor' => ['integer'],
+        'start_time' => ['date'],
+        'duration' => ['integer', 'between:0,5'],
+        'product' => ['print', 'max:64'],
+        'problem' => ['print', 'max:64'],
+        'solution' => ['print', 'max:64'],
     ];
-    
+
     /**
      * 定义错误信息
-     * 格式：'字段名.规则名'	=>	'错误信息'
+     * 格式：'字段名.规则名'    =>    '错误信息'
      *
      * @var array
-     */	
+     */
     protected $message = [];
+
+    public function sceneCreate() {
+        $this->append('nick', 'require')
+            ->append('email', 'require')
+            ->append('permission', 'require');
+    }
 }
