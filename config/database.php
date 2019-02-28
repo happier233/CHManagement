@@ -19,11 +19,11 @@ return [
     // 数据库名
     'database'        => Env::get('database.db', 'CHManagement'),
     // 用户名
-    'username'        =>  Env::get('database.user', 'root'),
+    'username'        =>  Env::get('database.user', 'chm'),
     // 密码
-    'password'        => Env::get('database.password', 'root'),
+    'password'        => Env::get('database.password', 'chm'),
     // 端口
-    'hostport'        => '',
+    'hostport'        => Env::get('database.port', 3306),
     // 连接dsn
     'dsn'             => '',
     // 数据库连接参数
