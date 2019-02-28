@@ -20,20 +20,19 @@ trait ApiResponse
      * @param  mixed     $data 要返回的数据
      * @param  integer   $code 返回的code
      * @param  mixed     $msg 提示信息
-     * @param  string    $type 返回数据格式
+     * @param  int       $http_code http代码
      * @param  array     $header 发送的Header信息
      * @return Response
      */
-    protected function api($data, $code = 0, $msg = '', $type = '', array $header = [])
+    protected function api($data, $code = 0, $msg = '', $http_code = 200, array $header = [])
     {
         $result = [
             'code' => $code,
-            'msg'  => $msg,
+            'msg' => $msg,
             'time' => time(),
             'data' => $data,
         ];
-
-        $response = Response::create($result, 'json')->header($header);
+        $response = Response::create($result, 'json')->code($http_code)->header($header);
         return $response;
     }
 
