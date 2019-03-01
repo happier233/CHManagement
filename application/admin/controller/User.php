@@ -33,6 +33,7 @@ class User extends Controller
     /**
      * 显示用户列表
      *
+     * @param Request $request
      * @return \think\Response
      */
     public function list(Request $request)

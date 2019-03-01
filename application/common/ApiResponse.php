@@ -24,7 +24,7 @@ trait ApiResponse
      * @param  array     $header 发送的Header信息
      * @return Response
      */
-    protected function api($data, $code = 0, $msg = '', $http_code = 200, array $header = [])
+    protected function api($data = null, $code = 0, $msg = '', $http_code = 200, array $header = [])
     {
         $result = [
             'code' => $code,
