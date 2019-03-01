@@ -16,6 +16,11 @@ Route::get('think', function () {
 });
 
 Route::get('/', 'index/Index/index');
+Route::get('customer/info', 'index/Customer/info');
+Route::post('customer/emit', 'index/Customer/emit');
+
+Route::post('doctor/login', 'index/Doctor/login');
+Route::post('doctor/emit', 'index/Doctor/emit');
 
 return [
 

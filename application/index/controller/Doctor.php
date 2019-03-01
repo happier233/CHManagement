@@ -23,7 +23,7 @@ class Doctor extends Controller
 {
 
     protected $middleware = [
-        'DoctorAuth' => ['only' => 'emit'],
+        'DoctorAuth' => ['only' => ['emit']],
     ];
 
     public function index() {

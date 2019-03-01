@@ -16,7 +16,7 @@ class Customer extends Controller
 {
 
     protected $middleware = [
-        'CheckWork' => ['except' => 'index'],
+        'CheckWork' => ['except' => ['index']],
     ];
 
     public function index() {
