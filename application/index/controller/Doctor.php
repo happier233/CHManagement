@@ -37,7 +37,7 @@ class Doctor extends Controller
             'password|密码' => ['require'],
             'captcha|验证码' => ['require', 'captcha']
         ]);
-        if ($v->check($data)) {
+        if (!$v->check($data)) {
             return $this->api(null, 1, $v->getError());
         }
         $nick = $data['nick'];
