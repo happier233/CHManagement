@@ -23,7 +23,7 @@ class DoctorAuth
         if (!Session::has('doctor_login_id')) {
             return $this->api(null, 100, '请登录');
         }
-        $user = User::get(Session::get('login_id'));
+        $user = User::get(Session::get('doctor_login_id'));
         if ($user == null) {
             Session::delete('login_id');
             return $this->api(null, 100, '请登录');

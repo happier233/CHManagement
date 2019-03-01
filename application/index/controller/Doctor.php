@@ -31,7 +31,7 @@ class Doctor extends Controller
     }
 
     public function login(Request $request) {
-        $data = $request->post(['nick', 'password']);
+        $data = $request->only(['nick', 'password'], 'post');
         $v = Validate::make([
             'nick|用户名' => ['require'],
             'password|密码' => ['require'],
@@ -61,7 +61,7 @@ class Doctor extends Controller
     }
 
     public function emit(Request $request) {
-        $data = $request->post(['start_time', 'duration', 'product', 'problem', 'solution']);
+        $data = $request->only(['start_time', 'duration', 'product', 'problem', 'solution'], 'post');
         $result = $this->validate($data, 'app\index\validate\Work');
         if ($request !== true) {
             return $this->api(null, 1, $result);

@@ -22,7 +22,7 @@ class CheckWork
         if (!$request->has('id')) {
             return $this->api(null, 1, '参数错误');
         }
-        $id = $request->get(['id']);
+        $id = $request->get('id');
         /** @var Work|null $work */
         try {
             $work = Work::with(['doctor', 'detail'])->get($id);
