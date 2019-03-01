@@ -15,4 +15,14 @@ class Work extends Model
     protected $table = 'works';
     protected $autoWriteTimestamp = 'datetime';
 
+    public function doctor() {
+        return $this->belongsTo(Doctor::class, 'doctor')->bind([
+            'name'
+        ]);
+    }
+
+    public function detail() {
+        return $this->hasOne(WorkDetail::class);
+    }
+
 }

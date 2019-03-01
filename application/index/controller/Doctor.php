@@ -71,7 +71,7 @@ class Doctor extends Controller
         $work = new Work();
         $work->save($data);
         if ($request->has('qrcode')) {
-            $qrcode = new QrCode(Url::build('index/Customer/emit', ['id' => $work->id]));
+            $qrcode = new QrCode(Url::build('index/Customer/info', ['id' => $work->id]));
             $qrcode->setErrorCorrectionLevel(new ErrorCorrectionLevel(ErrorCorrectionLevel::HIGH));
             return $this->api(base64_encode($qrcode->writeString()));
         } else {
