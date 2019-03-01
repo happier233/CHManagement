@@ -15,6 +15,10 @@ use think\Request;
 class Customer extends Controller
 {
 
+    protected $middleware = [
+        'CheckWork' => ['except' => 'index'],
+    ];
+
     public function index() {
         return "Customer Index";
     }
