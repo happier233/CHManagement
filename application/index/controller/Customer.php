@@ -30,7 +30,7 @@ class Customer extends Controller
 
     public function emit(Request $request) {
         $work = $request->work;
-        $data = $request->only(['name', 'stu_id', 'college', 'evaluation', 'message'], 'post');
+        $data = $request->only(['name', 'tel', 'stu_id', 'college', 'evaluation', 'message'], 'post');
         $result = $this->validate($data, 'app\index\validate\WorkDetail.create');
         if ($result !== true) {
             return $this->api(null, 1, $result);

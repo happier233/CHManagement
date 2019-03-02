@@ -30,8 +30,8 @@ class Work extends Validate
     protected $message = [];
 
     public function sceneCreate() {
-        $this->append('nick', 'require')
-            ->append('email', 'require')
-            ->append('permission', 'require');
+        foreach (array_keys($this->rule) as $key) {
+            $this->append($key, 'require');
+        }
     }
 }
