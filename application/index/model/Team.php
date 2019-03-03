@@ -15,4 +15,8 @@ class Team extends Model
     protected $table = 'teams';
     protected $autoWriteTimestamp = 'datetime';
 
+    public function doctors(){
+        return $this->hasMany(Doctor::class, 'team');
+    }
+
 }
