@@ -54,7 +54,7 @@ class Doctor extends Controller
                 return $this->api(null, 3, '非电医身份');
             }
             Session::set('doctor_login_id', $user->id);
-            return $this->api();
+            return $this->api($user->id);
         } catch (\Exception $e) {
             return $this->api(null, 500, '系统内部错误', 500);
         }
