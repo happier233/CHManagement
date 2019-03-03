@@ -21,6 +21,7 @@ Route::post('customer/emit', 'index/Customer/emit');
 
 Route::post('doctor/login', 'index/Doctor/login');
 Route::post('doctor/emit', 'index/Doctor/emit');
+Route::post('doctor/check', 'index/Doctor/check');
 
 return [
 
