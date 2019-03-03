@@ -80,6 +80,10 @@ class Doctor extends Controller
     }
 
     public function check(Request $request) {
-        return $this->api($request->user->id);
+        return $this->api([
+            "id" => $request->user->id,
+            "nick" => $request->user->nick,
+            "name" => $request->doctor->name,
+        ]);
     }
 }
