@@ -54,7 +54,7 @@ class Doctor extends Controller
                 return $this->api(null, 3, '非电医身份');
             }
             Session::set('doctor_login_id', $user->id);
-            return $this->api($user->id);
+            return $this->api($user->visible(['id', 'nick', 'doctor.name']);
         } catch (\Exception $e) {
             return $this->api(null, 500, '系统内部错误', 500);
         }
@@ -80,10 +80,8 @@ class Doctor extends Controller
     }
 
     public function check(Request $request) {
-        return $this->api([
-            "id" => $request->user->id,
-            "nick" => $request->user->nick,
-            "name" => $request->doctor->name,
-        ]);
+        /** @var User $user */
+        $user = $request->user;
+        return $this->api($user->visible(['id', 'nick', 'doctor.name']));
     }
 }
