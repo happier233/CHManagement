@@ -23,7 +23,7 @@ class Doctor extends Controller
 {
 
     protected $middleware = [
-        'DoctorAuth' => ['only' => ['emit']],
+        'DoctorAuth' => ['only' => ['emit', 'check']],
     ];
 
     public function index() {
@@ -77,5 +77,9 @@ class Doctor extends Controller
         } else {
             return $this->api($work->id);
         }
+    }
+
+    public function check(Request $request) {
+        return $this->api($request->user->id);
     }
 }
