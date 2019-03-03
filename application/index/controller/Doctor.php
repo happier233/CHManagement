@@ -31,7 +31,7 @@ class Doctor extends Controller
     }
 
     public function login(Request $request) {
-        $data = $request->only(['nick', 'password'], 'post');
+        $data = $request->only(['nick', 'password', 'captcha'], 'post');
         $v = Validate::make([
             'nick|用户名' => ['require'],
             'password|密码' => ['require'],

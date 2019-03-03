@@ -12,9 +12,12 @@
 // +----------------------------------------------------------------------
 // | 日志设置
 // +----------------------------------------------------------------------
+
+use think\facade\Env;
+
 return [
     // 日志记录方式，内置 file socket 支持扩展
-    'type'        => 'File',
+    'type'        => Env::get('log.type', 'File'),
     // 日志保存目录
     'path'        => '',
     // 日志记录级别
@@ -27,4 +30,9 @@ return [
     'max_files'   => 0,
     // 是否关闭日志写入
     'close'       => false,
+    'host'                => Env::get('log.host', ''),
+    //日志强制记录到配置的client_id
+    'force_client_ids'    => explode(',', Env::get('log.force_client_ids', '')),
+    //限制允许读取日志的client_id
+    'allow_client_ids'    => explode(',', Env::get('log.allow_client_ids', '')),
 ];
