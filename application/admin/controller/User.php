@@ -3,6 +3,10 @@
 namespace app\admin\controller;
 
 use app\common\ApiResponse;
+use think\facade\Config;
+use think\facade\Session;
+use think\facade\Validate;
+use think\helper\Hash;
 use think\Model\Collection;
 use think\Controller;
 use think\Request;
@@ -25,9 +29,46 @@ class User extends Controller
      *
      * @return \think\Response
      */
-    public function index()
-    {
+    public function index() {
         //
+    }
+
+    public function login(Request $request) {
+        $data = $request->only(['nick', 'password', 'captcha'], 'post');
+        $v = Validate::make([
+            'nick|用户名' => ['require'],
+            'password|密码' => ['require'],
+            'captcha|验证码' => Config::get('app_debug') ? ['captcha'] : ['require', 'captcha'],
+        ]);
+        if (!$v->check($data)) {
+            return $this->api(null, 1, $v->getError());
+        }
+        $nick = $data['nick'];
+        $password = $data['password'];
+        try {
+            $user = UserModel::where('nick', $nick)->find();
+            if ($user == null) {
+                return $this->api(null, 2, '用户或密码错误');
+            }
+            if (!Hash::check($password, $user->password)) {
+                return $this->api(null, 2, '用户或密码错误');
+            }
+            Session::set('login_id', $user->id);
+            return $this->api($user->visible(['id', 'nick']));
+        } catch (\Exception $e) {
+            return $this->api(null, 500, '系统内部错误', 500);
+        }
+    }
+
+    public function check(Request $request) {
+        /** @var UserModel $user */
+        $user = $request->user;
+        if ($user->doctor) {
+            /** @var \app\index\model\Doctor $doctor */
+            $doctor = $user->doctor;
+            $doctor->visible(['name']);
+        }
+        return $this->api($user->visible(['id', 'nick']));
     }
 
     /**
@@ -36,8 +77,7 @@ class User extends Controller
      * @param Request $request
      * @return \think\Response
      */
-    public function list(Request $request)
-    {
+    public function list(Request $request) {
         $page = $request->get('page', 1);
         $count = $request->get('count', 20);
         /** @var Collection $user */
@@ -52,8 +92,7 @@ class User extends Controller
      * @param  \think\Request $request
      * @return \think\Response
      */
-    public function create(Request $request)
-    {
+    public function create(Request $request) {
         $data = $request->post([
             'nick',
             'email',
@@ -78,8 +117,7 @@ class User extends Controller
      * @param  int $id
      * @return \think\Response
      */
-    public function read($id)
-    {
+    public function read($id) {
         $user = UserModel::get($id);
         if ($user == null) {
             return $this->api(null, 1, "用户不存在");
@@ -95,8 +133,7 @@ class User extends Controller
      * @param  int $id
      * @return \think\Response
      */
-    public function update(Request $request, $id)
-    {
+    public function update(Request $request, $id) {
         $data = $request->post([
             'nick',
             'email',
@@ -122,8 +159,7 @@ class User extends Controller
      * @param  int $id
      * @return \think\Response
      */
-    public function delete($id)
-    {
+    public function delete($id) {
         /** @var UserModel $user */
         $user = UserModel::get($id);
         if ($user == null) {

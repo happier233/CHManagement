@@ -13,6 +13,7 @@ use app\index\model\User;
 use app\index\model\Work;
 use Endroid\QrCode\ErrorCorrectionLevel;
 use Endroid\QrCode\QrCode;
+use think\facade\Config;
 use think\facade\Session;
 use think\facade\Url;
 use think\helper\Hash;
@@ -35,7 +36,7 @@ class Doctor extends Controller
         $v = Validate::make([
             'nick|用户名' => ['require'],
             'password|密码' => ['require'],
-            'captcha|验证码' => ['require', 'captcha']
+            'captcha|验证码' => Config::get('app_debug') ? ['captcha'] : ['require', 'captcha'],
         ]);
         if (!$v->check($data)) {
             return $this->api(null, 1, $v->getError());
@@ -43,7 +44,7 @@ class Doctor extends Controller
         $nick = $data['nick'];
         $password = $data['password'];
         try {
-            $user = User::where('nick', $nick)->find();
+            $user = User::where('nick', $nick)->with(['doctor'])->find();
             if ($user == null) {
                 return $this->api(null, 2, '用户或密码错误');
             }
@@ -63,7 +64,7 @@ class Doctor extends Controller
     public function emit(Request $request) {
         $data = $request->only(['start_time', 'duration', 'product', 'problem', 'solution'], 'post');
         $result = $this->validate($data, 'app\index\validate\Work');
-        if ($request !== true) {
+        if ($result !== true) {
             return $this->api(null, 1, $result);
         }
         $doctor = $request->user->id;
