@@ -13,7 +13,7 @@ class Team extends Validate
      * @var array
      */
     protected $rule = [
-        'nick' => ['require', 'chsDash'],
+        'nick' => ['require', 'chsDash', 'min:1'],
     ];
 
     /**

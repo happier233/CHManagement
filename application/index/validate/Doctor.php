@@ -8,7 +8,7 @@ class Doctor extends Validate
 {
 
     protected $rule = [
-        'name' => ['chsAlpha'],
+        'name' => ['chsAlpha', 'min:1', 'max:32'],
         'id_code' => ['integer'],
         'stu_id' => ['integer'],
         'team' => ['integer'],

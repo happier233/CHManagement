@@ -13,12 +13,12 @@ class Work extends Validate
      * @var array
      */
     protected $rule = [
-        'doctor' => ['integer'],
-        'start_time' => ['date'],
-        'duration' => ['integer', 'between:0,5'],
-        'product' => ['print', 'max:64'],
-        'problem' => ['print', 'max:64'],
-        'solution' => ['print', 'max:64'],
+        'doctor|电医' => ['integer'],
+        'start_time|开始时间' => ['date'],
+        'duration|持续时间' => ['integer', 'between:0,5'],
+        'product|产品及型号' => ['print', 'max:64', 'min:1'],
+        'problem|问题' => ['print', 'max:64', 'min:1'],
+        'solution|解决方案' => ['print', 'max:64', 'min:1'],
     ];
 
     /**
