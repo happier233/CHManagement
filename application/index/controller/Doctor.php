@@ -31,6 +31,11 @@ class Doctor extends Controller
         return "Doctor Index";
     }
 
+    /**
+     * @param Request $request
+     * @return \think\Response
+     * @throws \Exception
+     */
     public function login(Request $request) {
         $data = $request->only(['nick', 'password', 'captcha'], 'post');
         $v = Validate::make([
@@ -57,7 +62,11 @@ class Doctor extends Controller
             Session::set('doctor_login_id', $user->id);
             return $this->api($user->visible(['id', 'nick', 'doctor.name']));
         } catch (\Exception $e) {
-            return $this->api(null, 500, '系统内部错误', 500);
+            if (Config::get('app_debug')) {
+                throw $e;
+            } else {
+                return $this->api(null, 500, '系统内部错误', 500);
+            }
         }
     }
 
