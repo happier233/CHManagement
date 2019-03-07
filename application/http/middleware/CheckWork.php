@@ -46,6 +46,7 @@ class CheckWork
         if ($work->detail != null) {
             return $this->api(null, 1, '该工单已失效');
         }
+        $request->work = $work;
         return $next($request);
     }
 

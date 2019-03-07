@@ -22,7 +22,7 @@ class Work extends Model
     }
 
     public function detail() {
-        return $this->hasOne(WorkDetail::class);
+        return $this->hasOne(WorkDetail::class, 'id', 'id');
     }
 
 }
