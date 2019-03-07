@@ -6,12 +6,7 @@ use think\Validate;
 
 class Work extends Validate
 {
-    /**
-     * 定义验证规则
-     * 格式：'字段名'    =>    ['规则1','规则2'...]
-     *
-     * @var array
-     */
+
     protected $rule = [
         'doctor|电医' => ['integer'],
         'start_time|开始时间' => ['date'],
@@ -21,15 +16,17 @@ class Work extends Validate
         'solution|解决方案' => ['print', 'max:64', 'min:1'],
     ];
 
-    /**
-     * 定义错误信息
-     * 格式：'字段名.规则名'    =>    '错误信息'
-     *
-     * @var array
-     */
-    protected $message = [];
+    protected $field = [
+        'doctor' => '电医',
+        'start_time' => '开始时间',
+        'duration' => '持续时间',
+        'product' => '产品及型号',
+        'problem' => '问题',
+        'solution' => '解决方案',
+    ];
 
-    public function sceneCreate() {
+    public function sceneCreate()
+    {
         foreach (array_keys($this->rule) as $key) {
             $this->append($key, 'require');
         }

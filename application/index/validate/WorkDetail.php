@@ -14,12 +14,20 @@ class WorkDetail extends Validate
 {
 
     protected $rule = [
-        'name|姓名' => ['chsAlpha', 'min:1', 'max:32'],
-        'tel|手机号' => ['integer'],
-        'stu_id|学号' => ['integer'],
-        'college|学院' => ['chsAlpha'],
-        'evaluation|评价' => ['integer', 'between:0,5'],
-        'message|留言' => ['print', 'max:256'],
+        'name' => ['chsAlpha', 'min:1', 'max:32'],
+        'tel' => ['integer'],
+        'stu_id' => ['integer'],
+        'college' => ['chsAlpha'],
+        'evaluation' => ['integer', 'between:0,5'],
+        'message' => ['print', 'max:256'],
+    ];
+
+    protected $field = [
+        'name' => '姓名',
+        'tel' => '手机号',
+        'college' => '学院',
+        'evaluation' => '评价',
+        'message' => '留言',
     ];
 
     public function sceneCreate()

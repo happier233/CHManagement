@@ -13,9 +13,15 @@ class User extends Validate
      * @var array
      */
     protected $rule = [
-        'nick|用户名' => ['alphaDash', 'length' => '4,32'],
-        'email|邮箱' => ['email'],
-        'permission|权限' => ['in' => \app\index\model\User::permissions],
+        'nick' => ['alphaDash', 'length' => '4,32'],
+        'email' => ['email'],
+        'permission' => ['in' => \app\index\model\User::permissions],
+    ];
+
+    protected $field = [
+        'nick' => '用户名',
+        'email' => '邮箱',
+        'permission' => '权限',
     ];
 
     /**
@@ -29,10 +35,11 @@ class User extends Validate
         'password.require' => '请输入密码',
     ];
 
-    public function sceneCreate() {
-        $this->append('nick', 'require')
-            ->append('password', 'require')
-            ->append('email', 'require')
-            ->append('permission', 'require');
+    public function sceneCreate()
+    {
+        $this->append('password', 'require');
+        foreach ($this->rule as $key => $value) {
+            $this->append($key, 'require');
+        }
     }
 }
