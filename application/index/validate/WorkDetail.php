@@ -32,7 +32,13 @@ class WorkDetail extends Validate
 
     public function sceneCreate()
     {
-        foreach (array_keys($this->rule) as $key) {
+        $keys = [
+            'name',
+            'tel',
+            'college',
+            'evaluation',
+        ];
+        foreach ($keys as $key) {
             $this->append($key, 'require');
         }
     }

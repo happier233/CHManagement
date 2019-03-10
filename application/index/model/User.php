@@ -86,8 +86,7 @@ class User extends Model
     }
 
     public function getIsDoctorAttr(){
-        dump($this->getAttr('doctor'));
-        return $this->getAttr('doctor') == null;
+        return (int)($this->getAttr('doctor') != null);
     }
 
 }

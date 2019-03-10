@@ -3,6 +3,7 @@
 namespace app\admin\controller;
 
 use app\common\ApiResponse;
+use think\db\Query;
 use think\facade\Config;
 use think\facade\Session;
 use think\facade\Validate;
@@ -75,22 +76,34 @@ class User extends Controller
      */
     public function list(Request $request, $page = 1, $count = 20)
     {
-        $user = (new UserModel())->page($page, $count)->withJoin(['doctor']);
+        $user = (new UserModel())->page($page, $count)->append(['is_doctor'])->withJoin(['doctor']);
         $keys = [
-            'id' => '=',
-            'nick' => 'LIKE',
-            'email' => 'LIKE',
-            'permission' => '=',
+            'id' => function($user, $value){
+                /** @var Query $user */
+                return $user->where('user.id', '=', $value);
+            },
+            'nick' => function($user, $value){
+                /** @var Query $user */
+                return $user->whereLike('nick', $value);
+            },
+            'email' => function($user, $value){
+                /** @var Query $user */
+                return $user->whereLike('email', $value);
+            },
+            'permission' => function($user, $value){
+                /** @var Query $user */
+                return $user->where('permission', '=', $value);
+            },
         ];
         foreach ($keys as $key => $where) {
-            if ($request->has($key) && (!empty($request->param('id')) || $request->param('id') == '0')) {
-                $user = $user->where($key, $where, $request->param('id'));
+            if ($request->has($key)) {
+                $user = $where($user, $request->param($key));
             }
         }
         $user = $user->select();
         /** @var Collection $user */
-        $user->visible(['id', 'nick', 'email', 'is_doctor', 'create_time', 'update_time'])->append(['is_doctor']);
-        return $this->api($user, 0);
+        $user->visible(['id', 'nick', 'email', 'is_doctor', 'create_time', 'update_time']);
+        return $this->api($user);
     }
 
     /**
