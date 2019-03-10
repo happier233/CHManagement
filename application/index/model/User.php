@@ -34,15 +34,15 @@ class User extends Model
 
     public static function userExists($options = [])
     {
-        $user = (new self);
+        $user = (new User());
         $find = false;
         if (isset($options['nick'])) {
             $find = true;
-            $user->whereOr('nick', $options['nick']);
+            $user = $user->whereOr('nick', '=', $options['nick']);
         }
-        if (isset($options['nick'])) {
+        if (isset($options['email'])) {
             $find = true;
-            $user->whereOr('nick', $options['nick']);
+            $user = $user->whereOr('email', '=', $options['email']);
         }
         return $find && $user->count('id') > 0;
     }
@@ -54,35 +54,40 @@ class User extends Model
 
     public function canViewUser(): bool
     {
-        return $this->position >= 1;
+        return $this->permission >= 1;
     }
 
     public function canViewWork(): bool
     {
-        return $this->position >= 2;
+        return $this->permission >= 2;
     }
 
 
     public function canEditUser(): bool
     {
-        return $this->position >= 3;
+        return $this->permission >= 3;
     }
 
 
     public function canEditWork(): bool
     {
-        return $this->position >= 4;
+        return $this->permission >= 4;
     }
 
 
     public function isAdmin(): bool
     {
-        return $this->position == 5;
+        return $this->permission == 5;
     }
 
     public function doctor()
     {
-        return $this->hasOne(Doctor::class, 'id', 'id')->setEagerlyType(0);
+        return $this->hasOne(Doctor::class, 'id', 'id');
+    }
+
+    public function getIsDoctorAttr(){
+        dump($this->getAttr('doctor'));
+        return $this->getAttr('doctor') == null;
     }
 
 }

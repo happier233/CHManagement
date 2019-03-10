@@ -18,11 +18,12 @@ class DoctorAuth
 
     use ApiResponse;
 
-    public function handle(Request $request, \Closure $next) {
+    public function handle(Request $request, \Closure $next)
+    {
         if (!Session::has('doctor_login_id')) {
             return $this->api(null, 100, '请登录');
         }
-        $user = User::get(Session::get('doctor_login_id'), ['doctor']);
+        $user = User::withJoin(['doctor'])->where('user.id', Session::get('doctor_login_id'))->find();
         if ($user == null) {
             Session::delete('doctor_login_id');
             return $this->api(null, 100, '请登录');

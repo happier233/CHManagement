@@ -49,7 +49,7 @@ class Doctor extends Controller
         $nick = $data['nick'];
         $password = $data['password'];
         try {
-            $user = User::where('nick', $nick)->with(['doctor'])->find();
+            $user = User::where('nick', $nick)->withJoin(['doctor'])->find();
             if ($user == null) {
                 return $this->api(null, 2, '用户或密码错误');
             }
@@ -72,12 +72,12 @@ class Doctor extends Controller
 
     public function emit(Request $request) {
         $data = $request->only(['start_time', 'duration', 'product', 'problem', 'solution'], 'post');
-        $result = $this->validate($data, 'app\index\validate\Work');
+        $doctor = $request->user->id;
+        $data['doctor'] = $doctor;
+        $result = $this->validate($data, 'app\index\validate\Work.create');
         if ($result !== true) {
             return $this->api(null, 1, $result);
         }
-        $doctor = $request->user->id;
-        $data['doctor'] = $doctor;
         $work = new Work();
         $work->save($data);
         if ($request->has('qrcode')) {

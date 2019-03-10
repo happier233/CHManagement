@@ -19,21 +19,13 @@ class User extends Controller
     use ApiResponse;
 
     protected $middleware = [
-        'Auth',
+        'Auth' => ['except' => ['login']],
         'ViewUser' => ['only' => ['list', 'read', 'create', 'update', 'delete']],
         'EditUser' => ['only' => ['create', 'update', 'delete']],
     ];
 
-    /**
-     * 显示资源列表
-     *
-     * @return \think\Response
-     */
-    public function index() {
-        //
-    }
-
-    public function login(Request $request) {
+    public function login(Request $request)
+    {
         $data = $request->only(['nick', 'password', 'captcha'], 'post');
         $v = Validate::make([
             'nick|用户名' => ['require'],
@@ -60,7 +52,8 @@ class User extends Controller
         }
     }
 
-    public function check(Request $request) {
+    public function check(Request $request)
+    {
         /** @var UserModel $user */
         $user = $request->user;
         if ($user->doctor) {
@@ -68,21 +61,35 @@ class User extends Controller
             $doctor = $user->doctor;
             $doctor->visible(['name']);
         }
-        return $this->api($user->visible(['id', 'nick']));
+        return $this->api($user->visible(['id', 'nick', 'doctor.name']));
     }
 
     /**
      * 显示用户列表
      *
      * @param Request $request
+     * @param int $page
+     * @param int $count
      * @return \think\Response
+     * @throws \Exception
      */
-    public function list(Request $request) {
-        $page = $request->get('page', 1);
-        $count = $request->get('count', 20);
+    public function list(Request $request, $page = 1, $count = 20)
+    {
+        $user = (new UserModel())->page($page, $count)->withJoin(['doctor']);
+        $keys = [
+            'id' => '=',
+            'nick' => 'LIKE',
+            'email' => 'LIKE',
+            'permission' => '=',
+        ];
+        foreach ($keys as $key => $where) {
+            if ($request->has($key) && (!empty($request->param('id')) || $request->param('id') == '0')) {
+                $user = $user->where($key, $where, $request->param('id'));
+            }
+        }
+        $user = $user->select();
         /** @var Collection $user */
-        $user = (new UserModel())->page($page, $count)->fetchCollection()->select();
-        $user->visible(['id', 'nick', 'email', 'create_time', 'update_time']);
+        $user->visible(['id', 'nick', 'email', 'is_doctor', 'create_time', 'update_time'])->append(['is_doctor']);
         return $this->api($user, 0);
     }
 
@@ -92,7 +99,8 @@ class User extends Controller
      * @param  \think\Request $request
      * @return \think\Response
      */
-    public function create(Request $request) {
+    public function create(Request $request)
+    {
         $data = $request->post([
             'nick',
             'email',
@@ -117,7 +125,8 @@ class User extends Controller
      * @param  int $id
      * @return \think\Response
      */
-    public function read($id) {
+    public function read($id)
+    {
         $user = UserModel::get($id);
         if ($user == null) {
             return $this->api(null, 1, "用户不存在");
@@ -133,7 +142,8 @@ class User extends Controller
      * @param  int $id
      * @return \think\Response
      */
-    public function update(Request $request, $id) {
+    public function update(Request $request, $id)
+    {
         $data = $request->post([
             'nick',
             'email',
@@ -159,7 +169,8 @@ class User extends Controller
      * @param  int $id
      * @return \think\Response
      */
-    public function delete($id) {
+    public function delete($id)
+    {
         /** @var UserModel $user */
         $user = UserModel::get($id);
         if ($user == null) {

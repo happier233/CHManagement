@@ -17,13 +17,16 @@ class Team extends Controller
      * @param int $count
      * @return \think\Response
      */
-    public function list($nick, int $page, int $count = 20)
+    public function list($nick = '', int $page = 1, int $count = 20)
     {
         try {
             $teams = (new TeamModel())->page($page, $count)
-                ->where('nick', 'LIKE', '%' . $nick . '%')
-                ->withCount(['doctors'])
-                ->select();
+                ->withCount(['doctors']);
+            if (!empty($nick)) {
+
+                $teams = $teams->where('nick', 'LIKE', '%' . $nick . '%');
+            }
+            $teams = $teams->select();
         } catch (\Exception $e) {
             return $this->api(null, 1, "系统内部错误");
         }
