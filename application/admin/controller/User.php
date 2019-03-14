@@ -75,9 +75,11 @@ class User extends Controller
      */
     public function list(Request $request, $page = 1, $count = 20)
     {
+        $keys = ['id', 'nick', 'email', 'permission'];
+        $data = $request->only($keys, 'post');
+        $keys = array_keys($data);
         $user = (new UserModel())->page($page, $count)->append(['is_doctor'])->withJoin(['doctor'], 'LEFT');
-        $user = $user->withSearch(['id', 'nick', 'email', 'permission'],
-            $request->only(['id', 'nick', 'email', 'permission'], 'post'));
+        $user = $user->withSearch($keys, $data);
         $user = $user->select();
         /** @var Collection $user */
         $user->visible(['id', 'nick', 'email', 'is_doctor', 'create_time', 'update_time']);

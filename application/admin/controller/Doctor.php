@@ -45,10 +45,12 @@ class Doctor extends Controller
 
     public function list(Request $request, $count = 20, $page = 1)
     {
+        $keys = ['uid', 'name', 'id_code', 'stu_id', 'team', 'position'];
+        $keys = array_keys($request->only($keys));
         $doctors = (new DoctorModel())
             ->withJoin(['team'])
-            ->withSearch(['uid', 'name', 'id_code', 'stu_id', 'team', 'position', 'team'],
-                $request->only(['uid', 'name', 'id_code', 'stu_id', 'team', 'position'], 'post'))
+            ->withSearch($keys,
+                $request->only($keys, 'post'))
             ->page($page, $count)
             ->visible(['uid', 'name', 'id_code', 'stu_id', 'team', 'team.nick', 'position'])
             ->select();

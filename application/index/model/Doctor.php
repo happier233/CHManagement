@@ -34,6 +34,10 @@ class Doctor extends Model
         return $this->belongsTo(User::class, 'id', 'id');
     }
 
+    public function team(){
+        return $this->belongsTo(Team::class, 'team');
+    }
+
     public function searchIdAttr(Query $query, $value)
     {
         $query->where('id', '=', $value);
