@@ -8,11 +8,15 @@
 
 namespace app\index\model;
 
+use app\common\ModelSearch;
+use think\db\Query;
 use think\helper\Hash;
 use think\Model;
 
 class User extends Model
 {
+    use ModelSearch;
+
     protected $table = 'users';
     protected $autoWriteTimestamp = 'datetime';
 
@@ -47,8 +51,9 @@ class User extends Model
         return $find && $user->count('id') > 0;
     }
 
-    public function setPassword($value)
+    public function setPassword($value, $data)
     {
+        if (empty($value)) return $data['password'] ?? '';
         return Hash::make($value);
     }
 
@@ -62,18 +67,15 @@ class User extends Model
         return $this->permission >= 2;
     }
 
-
     public function canEditUser(): bool
     {
         return $this->permission >= 3;
     }
 
-
     public function canEditWork(): bool
     {
         return $this->permission >= 4;
     }
-
 
     public function isAdmin(): bool
     {
@@ -82,11 +84,32 @@ class User extends Model
 
     public function doctor()
     {
-        return $this->hasOne(Doctor::class, 'id', 'id');
+        return $this->hasOne(Doctor::class, 'uid', 'id');
     }
 
-    public function getIsDoctorAttr(){
+    public function getIsDoctorAttr()
+    {
         return (int)($this->getAttr('doctor') != null);
+    }
+
+    public function searchIdAttr(Query $query, $value)
+    {
+        $this->searchAttrEqual($query, 'id', $value);
+    }
+
+    public function searchNickAttr(Query $query, $value)
+    {
+        $this->searchAttrLike($query, 'nick', $value);
+    }
+
+    public function searchEmailAttr(Query $query, $value)
+    {
+        $this->searchAttrLike($query, 'email', $value);
+    }
+
+    public function searchPermissionAttr(Query $query, $value)
+    {
+        $this->searchAttrEqual($query, 'permission', $value);
     }
 
 }

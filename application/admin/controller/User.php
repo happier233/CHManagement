@@ -3,7 +3,6 @@
 namespace app\admin\controller;
 
 use app\common\ApiResponse;
-use think\db\Query;
 use think\facade\Config;
 use think\facade\Session;
 use think\facade\Validate;
@@ -76,30 +75,9 @@ class User extends Controller
      */
     public function list(Request $request, $page = 1, $count = 20)
     {
-        $user = (new UserModel())->page($page, $count)->append(['is_doctor'])->withJoin(['doctor']);
-        $keys = [
-            'id' => function($user, $value){
-                /** @var Query $user */
-                return $user->where('user.id', '=', $value);
-            },
-            'nick' => function($user, $value){
-                /** @var Query $user */
-                return $user->whereLike('nick', $value);
-            },
-            'email' => function($user, $value){
-                /** @var Query $user */
-                return $user->whereLike('email', $value);
-            },
-            'permission' => function($user, $value){
-                /** @var Query $user */
-                return $user->where('permission', '=', $value);
-            },
-        ];
-        foreach ($keys as $key => $where) {
-            if ($request->has($key)) {
-                $user = $where($user, $request->param($key));
-            }
-        }
+        $user = (new UserModel())->page($page, $count)->append(['is_doctor'])->withJoin(['doctor'], 'LEFT');
+        $user = $user->withSearch(['id', 'nick', 'email', 'permission'],
+            $request->only(['id', 'nick', 'email', 'permission'], 'post'));
         $user = $user->select();
         /** @var Collection $user */
         $user->visible(['id', 'nick', 'email', 'is_doctor', 'create_time', 'update_time']);
@@ -129,7 +107,7 @@ class User extends Controller
             return $this->api(null, 1, '该用户名或邮箱已经存在');
         }
         $user = (new UserModel())->save($data);
-        return $this->api(null, 0, $result);
+        return $this->api($user);
     }
 
     /**

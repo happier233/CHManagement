@@ -8,10 +8,14 @@
 
 namespace app\index\model;
 
+use app\common\ModelSearch;
+use think\db\Query;
 use think\Model;
 
 class Doctor extends Model
 {
+    use ModelSearch;
+
     protected $table = 'doctors';
     protected $autoWriteTimestamp = 'datetime';
 
@@ -28,6 +32,36 @@ class Doctor extends Model
     public function user()
     {
         return $this->belongsTo(User::class, 'id', 'id');
+    }
+
+    public function searchIdAttr(Query $query, $value)
+    {
+        $query->where('id', '=', $value);
+    }
+
+    public function searchNameAttr(Query $query, $value)
+    {
+        $this->searchAttrLike($query, 'name', $value);
+    }
+
+    public function searchStuIdAttr(Query $query, $value)
+    {
+        $this->searchAttrIn($query, 'stu_id', $value);
+    }
+
+    public function searchIdCodeAttr(Query $query, $value)
+    {
+        $this->searchAttrIn($query, 'id_code', $value);
+    }
+
+    public function searchTeamAttr(Query $query, $value)
+    {
+        $this->searchAttrLike($query, 'team.nick', $value);
+    }
+
+    public function searchPositionAttr(Query $query, $value)
+    {
+        $this->searchAttrIn($query, 'position', $value);
     }
 
 }
