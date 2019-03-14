@@ -12,16 +12,27 @@ class Team extends Controller
     public function list($nick = '', int $page = 1, int $count = 20)
     {
         try {
-            $teams = (new TeamModel())->page($page, $count)
-                ->withCount(['doctors']);
+            $teams = (new TeamModel())
+                ->withCount(['doctors'])
+                ->page($page, $count);
             if (!empty($nick)) {
                 $teams = $teams->whereLike('nick', "%{$nick}%");
             }
+            $counts = (new TeamModel())
+                ->withCount(['doctors']);
+            if (!empty($nick)) {
+                $counts = $counts->whereLike('nick', "%{$nick}%");
+            }
+            $counts = $counts->count('id');
             $teams = $teams->select();
+            return $this->api([
+                'counts' => $counts,
+                'pages' => max(1, ceil($counts / $count)),
+                'list' => $teams,
+            ]);
         } catch (\Exception $e) {
             return $this->api(null, 1, "系统内部错误");
         }
-        return $this->api($teams);
     }
 
     public function create(Request $request)
