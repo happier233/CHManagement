@@ -10,3 +10,9 @@
 // +----------------------------------------------------------------------
 
 // 应用公共文件
+
+function filterEmpty($data) {
+    return array_filter($data, function ($value) {
+        return !empty($value) || $value == '0';
+    });
+}

@@ -35,7 +35,7 @@ class Customer extends Controller
         if ($result !== true) {
             return $this->api(null, 1, $result);
         }
-        $data['id'] = $work->id;
+        $data['wid'] = $work->id;
         $detail = new WorkDetail();
         $detail->save($data);
         return $this->api();

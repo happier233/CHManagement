@@ -24,8 +24,7 @@ class User extends Controller
         'EditUser' => ['only' => ['create', 'update', 'delete']],
     ];
 
-    public function login(Request $request)
-    {
+    public function login(Request $request) {
         $data = $request->only(['nick', 'password', 'captcha'], 'post');
         $v = Validate::make([
             'nick|用户名' => ['require'],
@@ -52,8 +51,7 @@ class User extends Controller
         }
     }
 
-    public function check(Request $request)
-    {
+    public function check(Request $request) {
         /** @var UserModel $user */
         $user = $request->user;
         if ($user->doctor) {
@@ -73,13 +71,12 @@ class User extends Controller
      * @return \think\Response
      * @throws \Exception
      */
-    public function list(Request $request, $page = 1, $count = 20)
-    {
+    public function list(Request $request, $page = 1, $count = 20) {
         $keys = ['id', 'nick', 'email', 'permission'];
-        $data = $request->only($keys, 'post');
+        $data = filterEmpty($request->only($keys, 'post'));
         $keys = array_keys($data);
         // counts
-        $counts =  (new UserModel())->withSearch($keys, $data)->count('id');
+        $counts = (new UserModel())->withSearch($keys, $data)->count('id');
         // users
         $user = (new UserModel())->page($page, $count)->append(['is_doctor'])->withJoin(['doctor'], 'LEFT');
         $user = $user->withSearch($keys, $data)->select();
@@ -98,8 +95,7 @@ class User extends Controller
      * @param  \think\Request $request
      * @return \think\Response
      */
-    public function create(Request $request)
-    {
+    public function create(Request $request) {
         $data = $request->post([
             'nick',
             'email',
@@ -124,8 +120,7 @@ class User extends Controller
      * @param  int $id
      * @return \think\Response
      */
-    public function read($id)
-    {
+    public function read($id) {
         $user = UserModel::get($id);
         if ($user == null) {
             return $this->api(null, 1, "用户不存在");
@@ -141,8 +136,7 @@ class User extends Controller
      * @param  int $id
      * @return \think\Response
      */
-    public function update(Request $request, $id)
-    {
+    public function update(Request $request, $id) {
         $data = $request->post([
             'nick',
             'email',
@@ -168,8 +162,7 @@ class User extends Controller
      * @param  int $id
      * @return \think\Response
      */
-    public function delete($id)
-    {
+    public function delete($id) {
         /** @var UserModel $user */
         $user = UserModel::get($id);
         if ($user == null) {

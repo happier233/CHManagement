@@ -20,7 +20,7 @@ class WorkDetail extends Model
     protected $updateTime = false;
 
     public function work() {
-        return $this->belongsTo(Work::class);
+        return $this->belongsTo(Work::class, 'wid');
     }
 
 }

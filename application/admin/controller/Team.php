@@ -9,6 +9,12 @@ use app\index\model\Team as TeamModel;
 class Team extends Controller
 {
 
+    protected $middleware = [
+        'Auth',
+        'ViewUser',
+        'EditUser' => ['only' => ['create', 'update', 'delete']],
+    ];
+
     public function list($nick = '', int $page = 1, int $count = 20)
     {
         try {

@@ -21,12 +21,13 @@ class Doctor extends Controller
     public function create(Request $request, $id)
     {
         $data = $request->param(['name', 'id_code', 'stu_id', 'team', 'position']);
+        $data['uid'] = $id;
         $result = $this->validate($data, 'app\index\validate\Doctor.create');
         if ($result !== true) {
             return $this->api(null, 1, $result);
         }
         /** @var UserModel $user */
-        $user = UserModel::withJoin(['doctor'], 'LEFT')->where('id', '=', $data['uid'])->find();
+        $user = (new UserModel())->withJoin(['doctor'], 'LEFT')->where('id', '=', $data['uid'])->find();
         if ($user == null) {
             return $this->api(null, 1, '绑定的用户不存在');
         }
@@ -46,7 +47,7 @@ class Doctor extends Controller
     public function list(Request $request, $count = 20, $page = 1)
     {
         $keys = ['uid', 'name', 'id_code', 'stu_id', 'team', 'position'];
-        $data = $request->only($keys, 'post');
+        $data = filterEmpty($request->only($keys, 'post'));
         $keys = array_keys($data);
         $counts = (new DoctorModel())
             ->withSearch($keys, $data)

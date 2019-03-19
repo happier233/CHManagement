@@ -2,84 +2,65 @@
 
 namespace app\admin\controller;
 
-use think\Controller;
+use app\common\Controller;
+use think\model\Collection;
 use think\Request;
+use app\index\model\Work as WorkModel;
 
 class Work extends Controller
 {
-    /**
-     * 显示资源列表
-     *
-     * @return \think\Response
-     */
-    public function index()
-    {
-        //
+
+    protected $middleware = [
+        'Auth',
+        'ViewWork',
+        'EditWork' => ['only' => ['delete']],
+    ];
+
+    public function list(Request $request, $page = 1, $count = 20) {
+        $keys = [
+            'id', 'doctor', 'start_time', 'duration',
+            'name', 'college', 'evaluation', 'confirm_time',
+        ];
+        $data = filterEmpty($request->only($keys, 'post'));
+        $keys = array_keys($keys);
+        $counts = (new WorkModel())
+            ->withJoin(['work_detail', 'doctor'], 'LEFT')
+            ->withSearch($keys, $data)
+            ->count('id');
+        /** @var Collection $works */
+        $works = (new WorkModel())
+            ->withJoin(['work_detail', 'doctor'], 'LEFT')
+            ->withSearch($keys, $data)
+            ->page($page, $count)->select();
+        $works->visible([
+            'id', 'doctor.name', 'start_time', 'duration',
+            'work_detail.name', 'work_detail.college', 'work_detail.evaluation', 'work_detail.confirm_time',
+        ]);
+        return $this->api([
+            'counts' => $counts,
+            'pages' => max(1, ceil($counts / $count)),
+            'list' => $works,
+        ]);
     }
 
-    /**
-     * 显示创建资源表单页.
-     *
-     * @return \think\Response
-     */
-    public function create()
-    {
-        //
+    public function read($id) {
+        $work = (new WorkModel())
+            ->withJoin(['work_detail', 'doctor'])
+            ->where('id', '=', $id)
+            ->find();
+        if ($work == null) {
+            return $this->api(null, 1, '工单不存在');
+        }
+        return $this->api($work);
     }
 
-    /**
-     * 保存新建的资源
-     *
-     * @param  \think\Request  $request
-     * @return \think\Response
-     */
-    public function save(Request $request)
-    {
-        //
-    }
-
-    /**
-     * 显示指定的资源
-     *
-     * @param  int  $id
-     * @return \think\Response
-     */
-    public function read($id)
-    {
-        //
-    }
-
-    /**
-     * 显示编辑资源表单页.
-     *
-     * @param  int  $id
-     * @return \think\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * 保存更新的资源
-     *
-     * @param  \think\Request  $request
-     * @param  int  $id
-     * @return \think\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * 删除指定资源
-     *
-     * @param  int  $id
-     * @return \think\Response
-     */
-    public function delete($id)
-    {
-        //
+    public function delete($id) {
+        /** @var WorkModel|null $work */
+        $work = WorkModel::get($id);
+        if ($work == null) {
+            return $this->api(null, 1, '该工单不存在');
+        }
+        $work->delete();
+        return $this->api();
     }
 }
