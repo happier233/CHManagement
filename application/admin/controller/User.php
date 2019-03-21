@@ -106,8 +106,7 @@ class User extends Controller
         if ($result !== true) {
             return $this->api(null, 1, $result);
         }
-        $user = new UserModel();
-        if ($user->where(['nick', $data['nick']])->whereOr('email', $data['email'])->count('id') > 0) {
+        if (UserModel::userExists($data)) {
             return $this->api(null, 1, '该用户名或邮箱已经存在');
         }
         $user = (new UserModel())->save($data);
