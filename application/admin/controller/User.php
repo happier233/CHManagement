@@ -103,7 +103,7 @@ class User extends Controller
             'permission',
         ], 'post');
         $result = $this->validate($data, 'app\index\validate\User.create');
-        if ($request !== true) {
+        if ($result !== true) {
             return $this->api(null, 1, $result);
         }
         $user = new UserModel();
