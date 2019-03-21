@@ -96,12 +96,12 @@ class User extends Controller
      * @return \think\Response
      */
     public function create(Request $request) {
-        $data = $request->post([
+        $data = $request->only([
             'nick',
             'email',
             'password',
             'permission',
-        ]);
+        ], 'post');
         $result = $this->validate($data, 'app\index\validate\User.create');
         if ($request !== true) {
             return $this->api(null, 1, $result);
@@ -137,12 +137,12 @@ class User extends Controller
      * @return \think\Response
      */
     public function update(Request $request, $id) {
-        $data = $request->post([
+        $data = $request->only([
             'nick',
             'email',
             'password',
             'permission',
-        ]);
+        ], 'post');
         $result = $this->validate($data, UserValidator::class);
         if ($result !== true) {
             return $this->api(null, 1, $result);
