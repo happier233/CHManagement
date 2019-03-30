@@ -3,6 +3,8 @@
 namespace app\admin\controller;
 
 use app\common\Controller;
+use think\facade\Config;
+use think\facade\Log;
 use think\Request;
 use app\index\model\Team as TeamModel;
 
@@ -15,8 +17,7 @@ class Team extends Controller
         'EditUser' => ['only' => ['create', 'update', 'delete']],
     ];
 
-    public function list($nick = '', int $page = 1, int $count = 20)
-    {
+    public function list($nick = '', int $page = 1, int $count = 20) {
         try {
             $teams = (new TeamModel())
                 ->withCount(['doctors'])
@@ -41,8 +42,7 @@ class Team extends Controller
         }
     }
 
-    public function create(Request $request)
-    {
+    public function create(Request $request) {
         $data = $request->only(['nick'], 'post');
         $result = $this->validate($data, 'app\index\validate\Team');
         if ($result !== true) {
@@ -61,23 +61,20 @@ class Team extends Controller
         }
     }
 
-    public function read($id)
-    {
+    public function read($id) {
         try {
             /** @var TeamModel $team */
             $team = (new TeamModel())->where('id', $id)->withCount(['doctors'])->find();
             if ($team == null) {
                 return $this->api(null, 1, "该队伍不存在");
             }
-            $team->load(['doctors']);
             return $this->api($team);
         } catch (\Exception $e) {
-            return $this->api(null, 1, "系统内部错误");
+            return $this->api(null, 1, Config::get('app_debug') ? $e->getMessage() : "系统内部错误");
         }
     }
 
-    public function update(Request $request, $id)
-    {
+    public function update(Request $request, $id) {
         $data = $request->only(['nick'], 'post');
         $result = $this->validate($data, 'app\index\validate\Team');
         if ($result !== true) {
@@ -95,8 +92,7 @@ class Team extends Controller
         }
     }
 
-    public function delete($id)
-    {
+    public function delete($id) {
         try {
             $team = (new TeamModel())->where('id', $id)->lock(true)->find();
             if ($team == null) {

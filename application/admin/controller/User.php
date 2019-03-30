@@ -4,6 +4,7 @@ namespace app\admin\controller;
 
 use app\common\ApiResponse;
 use think\facade\Config;
+use think\facade\Log;
 use think\facade\Session;
 use think\facade\Validate;
 use think\helper\Hash;
@@ -19,7 +20,7 @@ class User extends Controller
     use ApiResponse;
 
     protected $middleware = [
-        'Auth' => ['except' => ['login']],
+        'Auth' => ['except' => ['login', 'logout']],
         'ViewUser' => ['only' => ['list', 'read', 'create', 'update', 'delete']],
         'EditUser' => ['only' => ['create', 'update', 'delete']],
     ];
@@ -47,6 +48,7 @@ class User extends Controller
             Session::set('login_id', $user->id);
             return $this->api($user->visible(['id', 'nick']));
         } catch (\Exception $e) {
+            Log::warning($e);
             return $this->api(null, 500, '系统内部错误', 500);
         }
     }
@@ -173,5 +175,10 @@ class User extends Controller
         } catch (\Exception $e) {
             return $this->api(null, 1, '系统内部错误');
         }
+    }
+
+    public function logout() {
+        Session::delete('login_id');
+        return $this->api('登出成功');
     }
 }

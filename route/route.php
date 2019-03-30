@@ -25,14 +25,19 @@ Route::post('doctor/check', 'index/Doctor/check');
 
 Route::post('admin/login', 'admin/User/login');
 Route::post('admin/check', 'admin/User/check');
+Route::post('admin/logout', 'admin/User/logout');
 Route::post('admin/user/list', 'admin/User/list');
 Route::post('admin/user/create', 'admin/User/create');
+Route::post('admin/user/read/:id', 'admin/User/read')
+    ->pattern(['id' => '\d+']);
 Route::post('admin/user/read', 'admin/User/read');
 Route::post('admin/user/update', 'admin/User/update');
 Route::post('admin/user/delete', 'admin/User/delete');
 
 Route::post('admin/team/list', 'admin/Team/list');
 Route::post('admin/team/create', 'admin/Team/create');
+Route::post('admin/team/read/:id', 'admin/Team/read')
+    ->pattern(['id' => '\d+']);;
 Route::post('admin/team/read', 'admin/Team/read');
 Route::post('admin/team/update', 'admin/Team/update');
 Route::post('admin/team/delete', 'admin/Team/delete');
