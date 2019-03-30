@@ -21,11 +21,17 @@ Route::post('customer/emit', 'index/Customer/emit');
 
 Route::post('doctor/login', 'index/Doctor/login');
 Route::post('doctor/emit', 'index/Doctor/emit');
+Route::get('doctor/check', 'index/Doctor/check');
 Route::post('doctor/check', 'index/Doctor/check');
+Route::get('doctor/logout', 'index/Doctor/logout');
+Route::post('doctor/logout', 'index/Doctor/logout');
 
 Route::post('admin/login', 'admin/User/login');
+Route::get('admin/check', 'admin/User/check');
 Route::post('admin/check', 'admin/User/check');
+Route::get('admin/logout', 'admin/User/logout');
 Route::post('admin/logout', 'admin/User/logout');
+
 Route::post('admin/user/list', 'admin/User/list');
 Route::post('admin/user/create', 'admin/User/create');
 Route::post('admin/user/read/:id', 'admin/User/read')

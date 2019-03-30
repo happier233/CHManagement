@@ -70,6 +70,12 @@ class Doctor extends Controller
         }
     }
 
+    public function logout()
+    {
+        Session::delete('doctor_login_id');
+        return $this->api();
+    }
+
     public function emit(Request $request) {
         $data = $request->only(['start_time', 'duration', 'product', 'problem', 'solution'], 'post');
         $doctor = $request->user->id;

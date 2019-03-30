@@ -24,7 +24,7 @@ abstract class PermissionCheck
         /** @var User $user */
         $user = $request->user;
         if (!$this->check($user)) {
-            return $this->api(null, 101, '系统内部错误');
+            return $this->api(null, 2, '权限不足');
         }
 
         return $next($request);
