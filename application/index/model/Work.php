@@ -20,7 +20,7 @@ class Work extends Model
     protected $autoWriteTimestamp = 'datetime';
 
     public function doctor() {
-        return $this->belongsTo(Doctor::class, 'doctor')->bind([
+        return $this->belongsTo(Doctor::class, 'doctor', 'uid')->bind([
             'name'
         ]);
     }
