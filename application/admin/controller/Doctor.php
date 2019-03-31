@@ -18,10 +18,10 @@ class Doctor extends Controller
         'EditUser' => ['only' => ['create', 'update', 'delete']],
     ];
 
-    public function create(Request $request, $id)
+    public function create(Request $request, $uid)
     {
         $data = $request->only(['name', 'id_code', 'stu_id', 'team', 'position'], 'post');
-        $data['uid'] = $id;
+        $data['uid'] = $uid;
         $result = $this->validate($data, 'app\index\validate\Doctor.create');
         if ($result !== true) {
             return $this->api(null, 1, $result);
@@ -66,16 +66,16 @@ class Doctor extends Controller
     }
 
     /**
-     * @param $id
+     * @param $uid
      * @return \think\Response
      * @throws \think\db\exception\ModelNotFoundException
      * @throws \think\exception\DbException
      */
-    public function read($id)
+    public function read($uid)
     {
         try {
             /** @var DoctorModel $doctor */
-            $doctor = (new DoctorModel())->withJoin(['team'])->where('id', '=', $id)->findOrFail();
+            $doctor = (new DoctorModel())->withJoin(['team'])->where('uid', '=', $uid)->findOrFail();
             $doctor->visible(['uid', 'name', 'id_code', 'stu_id', 'team', 'position']);
             return $this->api($doctor);
         } catch (DataNotFoundException $e) {
@@ -83,7 +83,7 @@ class Doctor extends Controller
         }
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, $uid)
     {
         $data = $request->param(['name', 'id_code', 'stu_id', 'team', 'position']);
         $result = $this->validate($data, 'app\index\validate\Doctor.create');
@@ -97,7 +97,7 @@ class Doctor extends Controller
             }
         }
         /** @var DoctorModel $doctor */
-        $doctor = DoctorModel::get($id);
+        $doctor = DoctorModel::get($uid);
         if ($doctor == null) {
             return $this->api(null, 0, '该电医不存在');
         }
@@ -105,10 +105,10 @@ class Doctor extends Controller
         return $this->api($doctor);
     }
 
-    public function delete($id)
+    public function delete($uid)
     {
         /** @var DoctorModel $doctor */
-        $doctor = DoctorModel::get($id);
+        $doctor = DoctorModel::get($uid);
         if ($doctor == null) {
             return $this->api(null, 0, '该电医不存在');
         }
