@@ -85,7 +85,7 @@ class Doctor extends Controller
 
     public function update(Request $request, $uid)
     {
-        $data = $request->param(['name', 'id_code', 'stu_id', 'team', 'position']);
+        $data = $request->only(['name', 'id_code', 'stu_id', 'team', 'position'], 'post');
         $result = $this->validate($data, 'app\index\validate\Doctor.create');
         if ($result !== true) {
             return $this->api(null, 1, $result);
