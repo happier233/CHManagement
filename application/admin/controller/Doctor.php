@@ -20,7 +20,7 @@ class Doctor extends Controller
 
     public function create(Request $request, $id)
     {
-        $data = $request->param(['name', 'id_code', 'stu_id', 'team', 'position']);
+        $data = $request->only(['name', 'id_code', 'stu_id', 'team', 'position'], 'post');
         $data['uid'] = $id;
         $result = $this->validate($data, 'app\index\validate\Doctor.create');
         if ($result !== true) {
@@ -76,7 +76,7 @@ class Doctor extends Controller
         try {
             /** @var DoctorModel $doctor */
             $doctor = (new DoctorModel())->withJoin(['team'])->where('id', '=', $id)->findOrFail();
-            $doctor->visible(['id', 'name', 'id_code', 'stu_id', 'team.nick', 'position']);
+            $doctor->visible(['uid', 'name', 'id_code', 'stu_id', 'team', 'position']);
             return $this->api($doctor);
         } catch (DataNotFoundException $e) {
             return $this->api(null, 0, '该电医不存在');
