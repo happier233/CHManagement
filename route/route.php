@@ -21,33 +21,32 @@ Route::post('customer/emit', 'index/Customer/emit');
 
 Route::post('doctor/login', 'index/Doctor/login');
 Route::post('doctor/emit', 'index/Doctor/emit');
-Route::get('doctor/check', 'index/Doctor/check');
-Route::post('doctor/check', 'index/Doctor/check');
-Route::get('doctor/logout', 'index/Doctor/logout');
-Route::post('doctor/logout', 'index/Doctor/logout');
+Route::rule('doctor/check', 'index/Doctor/check', 'GET|POST');
+Route::rule('doctor/logout', 'index/Doctor/logout', 'GET|POST');
 
 Route::post('admin/login', 'admin/User/login');
-Route::get('admin/check', 'admin/User/check');
-Route::post('admin/check', 'admin/User/check');
-Route::get('admin/logout', 'admin/User/logout');
-Route::post('admin/logout', 'admin/User/logout');
+Route::rule('admin/check', 'admin/User/check', 'GET|POST');
+Route::rule('admin/logout', 'admin/User/logout', 'GET|POST');
 
 Route::post('admin/user/list', 'admin/User/list');
 Route::post('admin/user/create', 'admin/User/create');
-Route::post('admin/user/read/:id', 'admin/User/read')
+Route::rule('admin/user/read/:id', 'admin/User/read', 'GET|POST')
     ->pattern(['id' => '\d+']);
-Route::post('admin/user/read', 'admin/User/read');
 Route::post('admin/user/update', 'admin/User/update');
-Route::post('admin/user/delete', 'admin/User/delete');
+Route::rule('admin/user/delete', 'admin/User/delete', 'GET|POST');
 
 Route::post('admin/team/list', 'admin/Team/list');
 Route::post('admin/team/create', 'admin/Team/create');
-Route::post('admin/team/read/:id', 'admin/Team/read')
-    ->pattern(['id' => '\d+']);;
-Route::post('admin/team/read', 'admin/Team/read');
+Route::rule('admin/team/read/:id', 'admin/Team/read', 'GET|POST')
+    ->pattern(['id' => '\d+']);
 Route::post('admin/team/update', 'admin/Team/update');
-Route::post('admin/team/delete', 'admin/Team/delete');
+Route::rule('admin/team/delete', 'admin/Team/delete', 'GET|POST');
 
+Route::post('admin/work/list', 'admin/Work/list');
+Route::rule('admin/work/read/:id?', 'admin/Work/read', 'GET|POST')
+    ->pattern(['id' => '\d+']);
+Route::rule('admin/work/delete', 'admin/Work/delete', 'GET|POST');
+Route::rule('admin/work/deleteMany', 'admin/Work/deleteMany', 'POST');
 
 return [
 

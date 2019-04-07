@@ -16,7 +16,8 @@ class Work extends Controller
         'EditWork' => ['only' => ['delete']],
     ];
 
-    public function list(Request $request, $page = 1, $count = 20) {
+    public function list(Request $request, $page = 1, $count = 20)
+    {
         $keys = [
             'id', 'doctor', 'start_time', 'duration',
             'name', 'college', 'evaluation', 'confirm_time',
@@ -43,7 +44,8 @@ class Work extends Controller
         ]);
     }
 
-    public function read($id) {
+    public function read($id)
+    {
         $work = (new WorkModel())
             ->withJoin(['work_detail', 'doctor'])
             ->where('id', '=', $id)
@@ -54,13 +56,32 @@ class Work extends Controller
         return $this->api($work);
     }
 
-    public function delete($id) {
+    public function delete($id)
+    {
         /** @var WorkModel|null $work */
         $work = WorkModel::get($id);
         if ($work == null) {
             return $this->api(null, 1, '该工单不存在');
         }
         $work->delete();
+        return $this->api();
+    }
+
+    public function deleteMany(Request $request)
+    {
+        if (!$request->has('id')) {
+            return $this->api(null, 1, '参数类型错误');
+
+        }
+        $id = $request->post('id');
+        if (!is_array($id)) {
+            return $this->api(null, 1, '参数类型错误');
+        }
+        foreach ($id as &$t) {
+            $t = (int)$t;
+        }
+        /** @var WorkModel|null $work */
+        WorkModel::destroy($id);
         return $this->api();
     }
 }
