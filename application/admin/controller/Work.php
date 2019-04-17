@@ -25,17 +25,17 @@ class Work extends Controller
         $data = filterEmpty($request->only($keys, 'post'));
         $keys = array_keys($keys);
         $counts = (new WorkModel())
-            ->withJoin(['work_detail', 'doctor'], 'LEFT')
+            ->withJoin(['detail', 'doctor'], 'LEFT')
             ->withSearch($keys, $data)
             ->count('id');
         /** @var Collection $works */
         $works = (new WorkModel())
-            ->withJoin(['work_detail', 'doctor'], 'LEFT')
+            ->withJoin(['detail', 'doctor'], 'LEFT')
             ->withSearch($keys, $data)
             ->page($page, $count)->select();
         $works->visible([
             'id', 'doctor.name', 'start_time', 'duration',
-            'work_detail.name', 'work_detail.college', 'work_detail.evaluation', 'work_detail.confirm_time',
+            'detail.name', 'detail.college', 'detail.evaluation', 'detail.confirm_time',
         ]);
         return $this->api([
             'counts' => $counts,
