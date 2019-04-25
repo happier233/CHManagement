@@ -48,7 +48,7 @@ Route::group('main_route', function () {
         ->pattern(['id' => '\d+']);
     Route::rule('admin/work/delete', 'admin/Work/delete', 'GET|POST');
     Route::rule('admin/work/deleteMany', 'admin/Work/deleteMany', 'POST');
-})->allowCrossDomain()->header('Access-Control-Allow-Origin', \think\facade\Env::get('static_domain'));
+})->allowCrossDomain()->header('Access-Control-Allow-Origin', \think\facade\Env::get('cors.static_domain'));
 
 return [
 
