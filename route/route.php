@@ -36,6 +36,13 @@ Route::group([], function () {
     Route::post('admin/user/update', 'admin/User/update');
     Route::rule('admin/user/delete', 'admin/User/delete', 'GET|POST');
 
+    Route::post('admin/doctor/list', 'admin/Doctor/list');
+    Route::post('admin/doctor/create', 'admin/Doctor/create');
+    Route::rule('admin/doctor/read/:id', 'admin/Doctor/read', 'GET|POST')
+        ->pattern(['id' => '\d+']);
+    Route::post('admin/doctor/update', 'admin/Doctor/update');
+    Route::rule('admin/doctor/delete', 'admin/Doctor/delete', 'GET|POST');
+
     Route::post('admin/team/list', 'admin/Team/list');
     Route::post('admin/team/create', 'admin/Team/create');
     Route::rule('admin/team/read/:id', 'admin/Team/read', 'GET|POST')
