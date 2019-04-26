@@ -60,9 +60,6 @@ Route::group([], function () {
     'Access-Control-Allow-Credentials' => 'true',
 ]);
 
-
-dump(\think\facade\Env::get('cors.static_domain'));
-
 return [
 
 ];
