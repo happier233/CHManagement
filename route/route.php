@@ -31,21 +31,21 @@ Route::group([], function () {
 
     Route::post('admin/user/list', 'admin/User/list');
     Route::post('admin/user/create', 'admin/User/create');
-    Route::rule('admin/user/read/:id', 'admin/User/read', 'GET|POST')
+    Route::rule('admin/user/read/:id?', 'admin/User/read', 'GET|POST')
         ->pattern(['id' => '\d+']);
     Route::post('admin/user/update', 'admin/User/update');
     Route::rule('admin/user/delete', 'admin/User/delete', 'GET|POST');
 
     Route::post('admin/doctor/list', 'admin/Doctor/list');
     Route::post('admin/doctor/create', 'admin/Doctor/create');
-    Route::rule('admin/doctor/read/:id', 'admin/Doctor/read', 'GET|POST')
+    Route::rule('admin/doctor/read/:uid?', 'admin/Doctor/read', 'GET|POST')
         ->pattern(['id' => '\d+']);
     Route::post('admin/doctor/update', 'admin/Doctor/update');
     Route::rule('admin/doctor/delete', 'admin/Doctor/delete', 'GET|POST');
 
     Route::post('admin/team/list', 'admin/Team/list');
     Route::post('admin/team/create', 'admin/Team/create');
-    Route::rule('admin/team/read/:id', 'admin/Team/read', 'GET|POST')
+    Route::rule('admin/team/read/:id?', 'admin/Team/read', 'GET|POST')
         ->pattern(['id' => '\d+']);
     Route::post('admin/team/update', 'admin/Team/update');
     Route::rule('admin/team/delete', 'admin/Team/delete', 'GET|POST');
