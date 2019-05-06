@@ -12,8 +12,14 @@ class Doctor extends Validate
         'id_code' => ['integer'],
         'stu_id' => ['integer'],
         'team' => ['integer'],
-        'position' => ['integer', 'in' => \app\index\model\Doctor::positions],
+        'position' => ['integer', 'in' => ''],
     ];
+
+    public function __construct(array $rules = [], array $message = [], array $field = [])
+    {
+        $this->rule['position']['in'] = implode(',', \app\index\model\Doctor::positions);
+        parent::__construct($rules, $message, $field);
+    }
 
     protected $message = [];
 

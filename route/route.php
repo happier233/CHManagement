@@ -60,6 +60,8 @@ Route::group([], function () {
     'Access-Control-Allow-Credentials' => 'true',
 ]);
 
+Route::any('test', 'index/Test/index');
+
 return [
 
 ];
