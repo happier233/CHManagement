@@ -18,6 +18,7 @@ class Doctor extends Model
 
     protected $table = 'doctors';
     protected $autoWriteTimestamp = 'datetime';
+    protected $pk = 'uid';
 
     const DOCTOR = 0;
     const DEPUTY_TEAM_LEADER = 1;
