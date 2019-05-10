@@ -47,7 +47,7 @@ class Work extends Controller
     public function read($id)
     {
         $work = (new WorkModel())
-            ->withJoin(['work_detail', 'doctor'])
+            ->withJoin(['detail', 'doctor'])
             ->where('id', '=', $id)
             ->find();
         if ($work == null) {
