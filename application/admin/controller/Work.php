@@ -34,8 +34,7 @@ class Work extends Controller
             ->withSearch($keys, $data)
             ->page($page, $count)->select();
         $works->visible([
-            'id', 'doctor.name', 'start_time', 'duration',
-            'detail.name', 'detail.college', 'detail.evaluation', 'detail.confirm_time',
+            'id', 'doctor', 'start_time', 'duration', 'detail',
         ]);
         return $this->api([
             'counts' => $counts,
