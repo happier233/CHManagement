@@ -25,7 +25,7 @@ class Work extends Controller
         $data = filterEmpty($request->only($keys, 'post'));
         $keys = array_keys($keys);
         $counts = (new WorkModel())
-            ->withJoin(['detail', 'doctor'], 'LEFT')
+            ->withJoin(['detail', 'doctor', 'doctor.team'], 'LEFT')
             ->withSearch($keys, $data)
             ->count('id');
         /** @var Collection $works */
@@ -33,9 +33,6 @@ class Work extends Controller
             ->withJoin(['detail', 'doctor'], 'LEFT')
             ->withSearch($keys, $data)
             ->page($page, $count)->select();
-        $works->visible([
-            'id', 'doctor', 'start_time', 'duration', 'detail',
-        ]);
         return $this->api([
             'counts' => $counts,
             'pages' => max(1, ceil($counts / $count)),
@@ -46,7 +43,7 @@ class Work extends Controller
     public function read($id)
     {
         $work = (new WorkModel())
-            ->withJoin(['detail', 'doctor'])
+            ->withJoin(['detail', 'doctor', 'doctor.team'])
             ->where('id', '=', $id)
             ->find();
         if ($work == null) {
