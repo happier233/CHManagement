@@ -25,6 +25,10 @@ class Work extends Model
         ]);
     }
 
+    public function tdoctor() {
+        return $this->belongsTo(TDoctor::class, 'doctor', 'uid');
+    }
+
     public function detail() {
         return $this->hasOne(WorkDetail::class, 'wid', 'id');
     }
