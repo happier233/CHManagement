@@ -28,7 +28,7 @@ class Work extends Controller
             ->count('id');
         /** @var Collection $works */
         $works = (new WorkModel())
-            ->withJoin(['detail', 'doctor'], 'LEFT')
+            ->withJoin(['detail', 'tdoctor'], 'LEFT')
             ->withSearch($keys, $data)
             ->page($page, $count)->select();
         $works = $works->toArray();
