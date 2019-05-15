@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6c5210cbdda806116cc5eeb1e5d5e7b9",
+    "content-hash": "360a726b98fbf55b4cfef9f0434a7b7a",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -536,16 +536,16 @@
         },
         {
             "name": "topthink/framework",
-            "version": "v5.1.35",
+            "version": "5.1.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/top-think/framework.git",
-                "reference": "c53c0c6132022a87e8ee9c4109939eaf9a8a7adb"
+                "reference": "57f4f268d4d4c1c96ab0507885c813490ca78248"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/top-think/framework/zipball/c53c0c6132022a87e8ee9c4109939eaf9a8a7adb",
-                "reference": "c53c0c6132022a87e8ee9c4109939eaf9a8a7adb",
+                "url": "https://api.github.com/repos/top-think/framework/zipball/57f4f268d4d4c1c96ab0507885c813490ca78248",
+                "reference": "57f4f268d4d4c1c96ab0507885c813490ca78248",
                 "shasum": ""
             },
             "require": {
@@ -583,7 +583,7 @@
                 "orm",
                 "thinkphp"
             ],
-            "time": "2019-03-03T00:44:44+00:00"
+            "time": "2019-05-10T08:06:39+00:00"
         },
         {
             "name": "topthink/think-captcha",
@@ -705,7 +705,9 @@
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "topthink/framework": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
