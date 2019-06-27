@@ -35,7 +35,8 @@ class Doctor extends Model
         return $this->belongsTo(User::class, 'uid', 'id');
     }
 
-    public function team(){
+    public function eteam()
+    {
         return $this->belongsTo(Team::class, 'team');
     }
 

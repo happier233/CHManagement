@@ -4,6 +4,7 @@ namespace app\admin\controller;
 
 use app\common\Controller;
 use think\db\exception\DataNotFoundException;
+use think\model\Collection;
 use think\Request;
 use app\index\model\Doctor as DoctorModel;
 use app\index\model\User as UserModel;
@@ -52,12 +53,18 @@ class Doctor extends Controller
         $counts = (new DoctorModel())
             ->withSearch($keys, $data)
             ->count('uid');
+        /** @var Collection $doctors */
         $doctors = (new DoctorModel())
-            ->withJoin(['team'])
+            ->withJoin(['eteam'])
             ->withSearch($keys, $data)
             ->page($page, $count)
-            ->visible(['uid', 'name', 'id_code', 'stu_id', 'team', 'team.nick', 'position'])
+            // ->visible(['uid', 'name', 'id_code', 'stu_id', 'team', 'team.nick', 'position'])
             ->select();
+        $doctors = $doctors->toArray();
+        foreach ($doctors as &$doctor) {
+            $doctor['team'] = $doctor['eteam'];
+            unset($doctor['eteam']);
+        }
         return $this->api([
             'counts' => $counts,
             'pages' => max(1, ceil($counts / $count)),
@@ -75,7 +82,7 @@ class Doctor extends Controller
     {
         try {
             /** @var DoctorModel $doctor */
-            $doctor = (new DoctorModel())->withJoin(['team'])->where('uid', '=', $uid)->findOrFail();
+            $doctor = (new DoctorModel())->withJoin(['eteam'])->where('uid', '=', $uid)->findOrFail();
             $doctor->visible(['uid', 'name', 'id_code', 'stu_id', 'team', 'position']);
             return $this->api($doctor);
         } catch (DataNotFoundException $e) {

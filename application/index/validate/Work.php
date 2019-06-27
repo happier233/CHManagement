@@ -11,9 +11,9 @@ class Work extends Validate
         'doctor' => ['integer'],
         'start_time' => ['date'],
         'duration' => ['integer', 'between:0,5'],
-        'product' => ['print', 'max:64', 'min:1'],
-        'problem' => ['print', 'max:64', 'min:1'],
-        'solution' => ['print', 'max:64', 'min:1'],
+        'product' => ['max:64', 'min:1'],
+        'problem' => ['max:64', 'min:1'],
+        'solution' => ['max:64', 'min:1'],
     ];
 
     protected $field = [

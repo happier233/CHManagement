@@ -19,7 +19,7 @@ class WorkDetail extends Validate
         'stu_id' => ['integer'],
         'college' => ['chsAlpha'],
         'evaluation' => ['integer', 'between:0,5'],
-        'message' => ['print', 'max:256'],
+        'message' => ['length:0,256'],
     ];
 
     protected $field = [
