@@ -24,18 +24,12 @@ class Work extends Controller
         ];
         $data = filterEmpty($request->only($keys, 'post'));
         $keys = array_keys($keys);
-        $counts = (new WorkModel())
-            ->withJoin(['detail', 'doctor'], 'LEFT')
-            ->withSearch($keys, $data)
-            ->count('id');
+        $counts = (new WorkModel())->count('id');
         /** @var Collection $works */
         $works = (new WorkModel())
-            ->withJoin(['detail', 'doctor'], 'LEFT')
+            ->withJoin(['detail', 'doctor.eteam'], 'LEFT')
             ->withSearch($keys, $data)
             ->page($page, $count)->select();
-        $works->visible([
-            'id', 'doctor', 'start_time', 'duration', 'detail',
-        ]);
         return $this->api([
             'counts' => $counts,
             'pages' => max(1, ceil($counts / $count)),
@@ -45,12 +39,28 @@ class Work extends Controller
 
     public function read($id)
     {
+        /** @var WorkModel $work */
         $work = (new WorkModel())
-            ->withJoin(['detail', 'doctor'])
+            ->withJoin(['detail', 'doctor'], 'LEFT')
             ->where('id', '=', $id)
             ->find();
         if ($work == null) {
             return $this->api(null, 1, '工单不存在');
+        }
+        $team = $work->getRelation('doctor')->eteam;
+        $work = $work->toArray();
+        $work['doctor']['tnick'] = $team->nick;
+        if (!isset($work['detail'])) {
+            $work['detail'] = [
+                'wid' => 0,
+                'name' => '未确认',
+                'tel' => '未确认',
+                'stu_id' => '未确认',
+                'college' => '未确认',
+                'evaluation' => '',
+                'message' => '',
+                'confirm_time' => '未确认',
+            ];
         }
         return $this->api($work);
     }
