@@ -51,7 +51,7 @@ class User extends Model
         return $find && $user->count('id') > 0;
     }
 
-    public function setPassword($value, $data)
+    public function setPasswordAttr($value, $data)
     {
         if (empty($value)) return $data['password'] ?? '';
         return Hash::make($value);
