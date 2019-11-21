@@ -48,7 +48,7 @@ class User extends Controller
             Session::set('login_id', $user->id);
             return $this->api($user->visible(['id', 'nick']));
         } catch (\Exception $e) {
-            Log::warning($e);
+            Log::warning($e->getMessage());
             return $this->api(null, 500, '系统内部错误', 500);
         }
     }
