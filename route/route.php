@@ -15,6 +15,8 @@ Route::get('think', function () {
     return 'hello,ThinkPHP5!';
 });
 
+Route::get('test', 'index/Test/index');
+
 Route::group([], function () {
     Route::get('/', 'index/Index/index');
     Route::get('customer/info', 'index/Customer/info');
