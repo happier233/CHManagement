@@ -30,44 +30,44 @@ class Doctor extends Model
         self::TEAM_LEADER,
     ];
 
-    public function user()
-    {
+    public function user() {
         return $this->belongsTo(User::class, 'uid', 'id');
     }
 
-    public function eteam()
-    {
+    public function eteam() {
         return $this->belongsTo(Team::class, 'team');
     }
 
-    public function searchIdAttr(Query $query, $value)
-    {
+    public function searchIdAttr(Query $query, $value) {
         $query->where('id', '=', $value);
     }
 
-    public function searchNameAttr(Query $query, $value)
-    {
+    public function searchNameAttr(Query $query, $value) {
         $this->searchAttrLike($query, 'name', $value);
     }
 
-    public function searchStuIdAttr(Query $query, $value)
-    {
+    public function searchStuIdAttr(Query $query, $value) {
         $this->searchAttrIn($query, 'stu_id', $value);
     }
 
-    public function searchIdCodeAttr(Query $query, $value)
-    {
+    public function searchIdCodeAttr(Query $query, $value) {
         $this->searchAttrIn($query, 'id_code', $value);
     }
 
-    public function searchTeamAttr(Query $query, $value)
-    {
+    public function searchTeamAttr(Query $query, $value) {
         $this->searchAttrLike($query, 'team.nick', $value);
     }
 
-    public function searchPositionAttr(Query $query, $value)
-    {
+    public function searchPositionAttr(Query $query, $value) {
         $this->searchAttrIn($query, 'position', $value);
+    }
+
+    public function getIdCodeAttr($value) {
+        return (string)$value;
+    }
+
+    public function getStuIdAttr($value) {
+        return (string)$value;
     }
 
 }

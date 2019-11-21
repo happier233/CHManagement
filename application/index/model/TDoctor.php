@@ -44,4 +44,12 @@ class TDoctor extends Model
         $this->searchAttrIn($query, 'position', $value);
     }
 
+    public function getIdCodeAttr($value) {
+        return (string)$value;
+    }
+
+    public function getStuIdAttr($value) {
+        return (string)$value;
+    }
+
 }
